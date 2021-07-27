@@ -10,7 +10,7 @@
 			<span class="login-container__form__input-border"></span>
 			<input
 				type="password"
-				placeholder="Password"
+				placeholder="Senha"
 				v-model="password"
 				class="login-container__form__input"
 			/>

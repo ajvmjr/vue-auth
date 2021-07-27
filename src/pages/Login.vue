@@ -10,7 +10,7 @@
 			<span class="login-container__form__input-border"></span>
 			<input
 				type="password"
-				placeholder="Password"
+				placeholder="Senha"
 				v-model="password"
 				class="login-container__form__input"
 			/>
@@ -37,7 +37,6 @@ export default {
 	methods: {
 		async login() {
 			if (!this.validateEmail(this.email)) return
-			console.log('passando')
 			try {
 				const data = await firebase
 					.auth()
