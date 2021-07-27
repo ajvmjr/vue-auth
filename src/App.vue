@@ -1,32 +1,75 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+	<div id="app">
+		<transition name="slide" mode="out-in">
+			<router-view />
+		</transition>
+		<transition name="slide" mode="out-in">
+			<Toast v-if="snackbar" :message="snackbarMsg" />
+		</transition>
+	</div>
 </template>
 
+<script>
+import Toast from '@/components/Toast'
+import { mapGetters } from 'vuex'
+
+export default {
+	data: () => ({
+		snackbar: false,
+	}),
+	computed: {
+		...mapGetters({
+			snackbarStatus: 'getSnackbar',
+			snackbarMsg: 'getSnackbarMsg',
+		}),
+	},
+	components: { Toast },
+	watch: {
+		snackbarStatus() {
+			this.snackbar = this.snackbarStatus
+
+			setTimeout(() => {
+				this.snackbar = false
+			}, 3000)
+		},
+		snackbar() {
+			if (!this.snackbar) {
+				this.$store.dispatch('setSnackbar', {
+					status: false,
+					message: '',
+				})
+			}
+		},
+	},
+}
+</script>
+
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+*,
+*::before,
+*::after {
+	margin: 0;
+	padding: 0;
 }
 
-#nav {
-  padding: 30px;
+#app {
+	align-items: center;
+	background: linear-gradient(120deg, #e75590, #00c2cb);
+	display: flex;
+	font-family: sans-serif;
+	justify-content: center;
+	height: 100vh;
+	width: 100vw;
+}
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+.slide-enter-active,
+.slide-leave-active {
+	transition: opacity 1s, transform 1s;
+}
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.slide-enter,
+.slide-lieave-to {
+	opacity: 0;
+	transform: translateX(-30%);
 }
 </style>
